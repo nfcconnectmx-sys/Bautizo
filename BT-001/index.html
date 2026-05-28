@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>✝️ Registro de Bautizo</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --navy:#0D1B5E; --blue:#1565C0; --blue2:#1976D2;
+  --gold:#FFD700; --gold2:#F5C518; --goldlight:#FFFBEA;
+  --dark:#0D1424; --mid:#3A4A6B; --light:#EEF4FF;
+  --shadow:rgba(13,24,94,0.14);
+}
+body { background:var(--light); font-family:'Nunito',sans-serif; min-height:100vh; max-width:420px; margin:0 auto; overflow-x:hidden; }
+.hero { background:linear-gradient(170deg,#050F3A 0%,#0D1B5E 40%,#1565C0 80%,#1976D2 100%); padding:32px 24px 75px; position:relative; overflow:hidden; text-align:center; }
+.hero::after { content:''; position:absolute; bottom:0; left:0; right:0; height:44px; background:var(--light); border-radius:44px 44px 0 0; }
+.star { position:absolute; color:var(--gold); opacity:.18; font-size:28px; }
+.s1{top:18px;left:16px;font-size:22px;} .s2{top:30px;right:18px;font-size:18px;}
+.s3{bottom:60px;left:30px;font-size:14px;} .s4{bottom:55px;right:25px;font-size:20px;}
+.cross-anim { font-size:62px; display:block; margin:0 auto 10px; animation:crossglow 3s ease-in-out infinite; }
+@keyframes crossglow {
+  0%,100%{filter:drop-shadow(0 0 6px var(--gold)) drop-shadow(0 0 14px rgba(255,215,0,.3));}
+  50%{filter:drop-shadow(0 0 18px var(--gold)) drop-shadow(0 0 35px rgba(255,215,0,.6));}
+}
+.dove-anim { font-size:28px; display:inline-block; animation:float 4s ease-in-out infinite; margin-left:10px; }
+@keyframes float { 0%,100%{transform:translateY(0) rotate(-5deg);} 50%{transform:translateY(-10px) rotate(5deg);} }
+.hero-logo { font-family:'Playfair Display',serif; font-size:13px; color:rgba(255,215,0,.8); letter-spacing:3px; text-transform:uppercase; margin-bottom:18px; }
+.hero h1 { font-family:'Playfair Display',serif; font-size:30px; color:white; line-height:1.15; text-shadow:0 3px 18px rgba(0,0,0,.3); position:relative; z-index:1; }
+.hero h1 span { color:var(--gold); }
+.hero p { font-size:13px; color:rgba(255,255,255,.85); font-weight:700; margin-top:8px; position:relative; z-index:1; }
+.banner { background:var(--gold); margin:0 18px; border-radius:18px; padding:14px 18px; text-align:center; position:relative; z-index:2; margin-top:-10px; box-shadow:0 4px 18px rgba(245,197,24,.5); }
+.banner p { font-size:13px; font-weight:900; color:var(--dark); line-height:1.55; }
+.content { padding:16px 18px 48px; display:flex; flex-direction:column; gap:14px; }
+.card { background:white; border-radius:20px; padding:20px; box-shadow:0 4px 22px var(--shadow); }
+.card-title { font-family:'Playfair Display',serif; font-size:14px; letter-spacing:.5px; color:var(--navy); text-transform:uppercase; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+.card-title::after { content:''; flex:1; height:1.5px; background:linear-gradient(to right,#D0DAFF,transparent); }
+.field { display:flex; flex-direction:column; gap:5px; margin-bottom:12px; }
+.field:last-child { margin-bottom:0; }
+.field label { font-size:11px; color:var(--mid); font-weight:700; letter-spacing:.8px; text-transform:uppercase; }
+.field input,.field select,.field textarea {
+  background:var(--light); border:1.5px solid #C5D0F0; color:var(--dark);
+  font-family:'Nunito',sans-serif; font-size:15px; font-weight:600;
+  padding:11px 14px; border-radius:12px; width:100%; outline:none; transition:border-color .2s;
+}
+.field input:focus,.field select:focus,.field textarea:focus { border-color:#1565C0; }
+.field textarea { resize:none; height:80px; }
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.codigo-wrap { background:var(--navy); border-radius:16px; padding:18px; }
+.codigo-wrap label { font-size:11px; color:var(--gold); font-weight:700; letter-spacing:1.5px; text-transform:uppercase; display:block; margin-bottom:8px; }
+.codigo-wrap input { background:#0A1240; border:1.5px solid #1E2E7A; color:var(--gold); font-family:'Playfair Display',serif; font-size:22px; letter-spacing:4px; padding:12px 16px; border-radius:12px; width:100%; outline:none; text-transform:uppercase; }
+.codigo-hint { font-size:11px; color:#7A8EC0; margin-top:8px; font-weight:600; }
+.foto-zona { border:2px dashed #90A4D8; border-radius:16px; padding:28px 16px; text-align:center; cursor:pointer; background:#F0F5FF; transition:border-color .2s; }
+.foto-zona:hover { border-color:#1565C0; }
+.music-opts { display:flex; flex-direction:column; gap:8px; }
+.music-opt { display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:14px; border:1.5px solid #C5D0F0; cursor:pointer; transition:all .2s; background:var(--light); }
+.music-opt:has(input:checked) { border-color:var(--blue); background:#EEF4FF; box-shadow:0 2px 10px rgba(21,101,192,.12); }
+.music-opt input[type="radio"] { accent-color:var(--blue); width:18px; height:18px; flex-shrink:0; }
+.music-opt-label { font-size:14px; font-weight:700; color:var(--dark); }
+.music-opt-sub { font-size:11px; color:var(--mid); font-weight:600; }
+.url-campo { display:none; margin-top:10px; }
+.url-campo.visible { display:block; }
+.mensaje-preview { background:linear-gradient(135deg,#0D1B5E,#1565C0); border-radius:16px; padding:20px; margin-top:10px; display:none; }
+.mensaje-preview.visible { display:block; }
+.mensaje-preview p { font-family:'Playfair Display',serif; font-size:14px; color:white; line-height:1.7; font-style:italic; text-align:center; }
+.btn-enviar { background:linear-gradient(135deg,var(--navy),var(--blue2)); color:white; font-family:'Nunito',sans-serif; font-size:18px; font-weight:900; padding:20px; border-radius:18px; border:none; width:100%; cursor:pointer; box-shadow:0 6px 24px rgba(13,27,94,.4); transition:transform .15s; display:flex; align-items:center; justify-content:center; gap:10px; letter-spacing:.5px; }
+.btn-enviar:active { transform:scale(.97); }
+.btn-enviar:disabled { opacity:.6; cursor:not-allowed; }
+.success-screen { display:none; text-align:center; padding:48px 24px 60px; flex-direction:column; align-items:center; gap:18px; }
+.success-screen.show { display:flex; }
+.success-icon { font-size:80px; animation:float 3s ease-in-out infinite; }
+.success-screen h2 { font-family:'Playfair Display',serif; font-size:30px; color:var(--navy); line-height:1.2; }
+.success-screen p { font-size:14px; color:var(--mid); font-weight:600; line-height:1.65; max-width:320px; }
+.success-box { background:white; border-radius:18px; padding:18px 22px; box-shadow:0 4px 20px var(--shadow); width:100%; text-align:left; }
+.success-box .lbl { font-size:11px; color:var(--mid); font-weight:700; letter-spacing:1px; text-transform:uppercase; margin-bottom:4px; }
+.success-box .val { font-family:'Playfair Display',serif; font-size:22px; color:var(--dark); letter-spacing:3px; }
+.success-badge { background:#E8F5E9; border:1.5px solid #A5D6A7; color:#2E7D32; font-size:13px; font-weight:900; padding:10px 22px; border-radius:30px; }
+.footer { text-align:center; padding:0 0 28px; font-size:11px; color:#7A8EC0; font-weight:700; letter-spacing:1px; }
+.footer span { color:var(--blue); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="star s1">✦</div>
+  <div class="star s2">✦</div>
+  <div class="star s3">✦</div>
+  <div class="star s4">✦</div>
+  <div class="hero-logo">Recuerdo Inteligente de Bautizo</div>
+  <span class="cross-anim">✝️</span>
+  <span class="dove-anim">🕊️</span>
+  <h1>Activa tu<br><span>Recuerdo</span><br>de Bautizo</h1>
+  <p>"El que crea y sea bautizado será salvo" — Marcos 16:16</p>
+</div>
+
+<div class="banner">
+  <p>📋 Llena los datos a continuación.<br>Tu página de bautizo estará lista en <strong>24 horas</strong> ✅</p>
+</div>
+
+<div class="content" id="formArea">
+
+  <div class="card">
+    <div class="card-title">🏷️ Código de tu placa</div>
+    <div class="codigo-wrap">
+      <label>Código (está en el reverso de tu placa)</label>
+      <input type="text" id="fCodigo" placeholder="BT-001" maxlength="10">
+      <div class="codigo-hint">Ejemplo: BT-001, BT-002…</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📷 Foto del bautizado/a</div>
+    <input type="file" id="fFoto" accept="image/jpeg,image/png" style="display:none;" onchange="previewFoto(this)">
+    <div class="foto-zona" id="fotoZona" onclick="document.getElementById('fFoto').click()">
+      <div id="fotoContenido">
+        <div style="font-size:48px;margin-bottom:10px;">📷</div>
+        <div style="font-size:15px;font-weight:800;color:var(--blue);">Toca aquí para subir una foto</div>
+        <div style="font-size:12px;color:var(--mid);font-weight:700;margin-top:4px;">JPG o PNG · máx. 5 MB</div>
+      </div>
+      <div id="fotoPreview" style="display:none;">
+        <img id="fotoImg" src="" alt="Vista previa" style="max-width:100%;max-height:200px;border-radius:12px;border:2px solid #90A4D8;">
+        <div style="font-size:12px;color:var(--blue);font-weight:700;margin-top:8px;">✅ Foto seleccionada · Toca para cambiar</div>
+      </div>
+    </div>
+    <div id="fotoStatus" style="font-size:12px;color:var(--mid);font-weight:700;margin-top:8px;text-align:center;"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🕊️ Datos del bautizado/a</div>
+    <div class="field">
+      <label>Nombre completo</label>
+      <input type="text" id="fNombre" placeholder="Ej. Santiago Rodríguez">
+    </div>
+    <div class="two-col">
+      <div class="field">
+        <label>Fecha del bautizo</label>
+        <input type="date" id="fFecha">
+      </div>
+      <div class="field">
+        <label>Sexo</label>
+        <select id="fSexo">
+          <option value="Hombre">Hombre</option>
+          <option value="Mujer">Mujer</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">👨‍👩‍👦 Nombre de los papás</div>
+    <div class="field">
+      <label>Nombre del papá</label>
+      <input type="text" id="fPadre" placeholder="Ej. Roberto García">
+    </div>
+    <div class="field">
+      <label>Nombre de la mamá</label>
+      <input type="text" id="fMadre" placeholder="Ej. Laura Martínez">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">💛 Mensaje de los papás</div>
+    <div class="field">
+      <label>Un mensaje especial para tu hijo/a</label>
+      <textarea id="fMensaje" placeholder="Ej. Eres el regalo más hermoso que Dios nos dio. Te amamos con todo el corazón..." oninput="previewMensaje(this)"></textarea>
+    </div>
+    <div class="mensaje-preview" id="mensajePreview">
+      <p id="mensajeTexto"></p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🎵 Música de fondo</div>
+    <div class="music-opts">
+      <label class="music-opt">
+        <input type="radio" name="musica" value="instrumental" checked onchange="toggleMusica(this)">
+        <div>
+          <div class="music-opt-label">🎼 Música cristiana instrumental</div>
+          <div class="music-opt-sub">Himno instrumental por defecto</div>
+        </div>
+      </label>
+      <label class="music-opt">
+        <input type="radio" name="musica" value="personalizada" onchange="toggleMusica(this)">
+        <div>
+          <div class="music-opt-label">🔗 Mi propia canción</div>
+          <div class="music-opt-sub">Pega el link de tu canción (Google Drive, etc.)</div>
+        </div>
+      </label>
+      <label class="music-opt">
+        <input type="radio" name="musica" value="ninguna" onchange="toggleMusica(this)">
+        <div>
+          <div class="music-opt-label">🔇 Sin música</div>
+          <div class="music-opt-sub">Solo el contenido visual</div>
+        </div>
+      </label>
+    </div>
+    <div class="url-campo" id="urlCampo">
+      <div class="field" style="margin-top:4px;">
+        <label>Link de tu canción (MP3 o Google Drive público)</label>
+        <input type="url" id="fMusicaUrl" placeholder="https://drive.google.com/...">
+      </div>
+      <div style="font-size:11px;color:var(--mid);font-weight:700;margin-top:4px;">
+        💡 Sube tu canción a Google Drive → "Compartir" → "Cualquiera con el enlace" → pega el link aquí
+      </div>
+    </div>
+  </div>
+
+  <button class="btn-enviar" id="btnEnviar" onclick="enviar()">
+    ✝️ Activar mi Recuerdo de Bautizo
+  </button>
+
+</div>
+
+<div class="success-screen" id="successScreen">
+  <span class="success-icon">✝️</span>
+  <h2>¡Datos<br>recibidos!</h2>
+  <p>En menos de <strong>24 horas</strong> tu Recuerdo de Bautizo estará listo. Que Dios los bendiga. 🙏</p>
+  <div class="success-box">
+    <div class="lbl">Tu código de placa</div>
+    <div class="val" id="successCodigo">BT-001</div>
+  </div>
+  <div class="success-badge">✅ Solicitud enviada correctamente</div>
+</div>
+
+<div class="footer">Hecho con ❤️ por <span>NFC Connect MX</span></div>
+
+<script>
+// ============================================================
+//  CONFIGURACIÓN
+// ============================================================
+const IMGBB_KEY = "f1db41c660962a03ee1d6d2ad11c9a86";
+
+const GOOGLE_FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLSdTG_IvHMJ99CBpO4sY0ngTs186zwG3-0EYADC_wRHN0lOkTg/formResponse";
+
+const ENTRY = {
+  codigo:    "entry.370087155",
+  foto:      "entry.553892289",
+  nombre:    "entry.301461393",
+  fecha:     "entry.1985699989",
+  sexo:      "entry.1758860863",
+  padre:     "entry.1306373806",
+  madre:     "entry.1116848490",
+  mensaje:   "entry.1514147354",
+  musica:    "entry.1723085436",
+  musicaUrl: "entry.2008352203",
+};
+
+function previewFoto(input) {
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      document.getElementById('fotoImg').src = e.target.result;
+      document.getElementById('fotoContenido').style.display = 'none';
+      document.getElementById('fotoPreview').style.display = 'block';
+      document.getElementById('fotoZona').style.borderColor = '#1565C0';
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+function previewMensaje(el) {
+  const texto = el.value.trim();
+  const preview = document.getElementById('mensajePreview');
+  const textoEl = document.getElementById('mensajeTexto');
+  if (texto.length > 10) {
+    textoEl.textContent = '"' + texto + '"';
+    preview.classList.add('visible');
+  } else {
+    preview.classList.remove('visible');
+  }
+}
+
+function toggleMusica(radio) {
+  const urlCampo = document.getElementById('urlCampo');
+  urlCampo.classList.toggle('visible', radio.value === 'personalizada');
+}
+
+async function subirFotoImgBB() {
+  const fileInput = document.getElementById('fFoto');
+  if (!fileInput.files || !fileInput.files[0]) return '';
+  const status = document.getElementById('fotoStatus');
+  status.textContent = '📤 Subiendo foto…';
+  const formData = new FormData();
+  formData.append('image', fileInput.files[0]);
+  try {
+    const res = await fetch('https://api.imgbb.com/1/upload?key=' + IMGBB_KEY, { method:'POST', body:formData });
+    const data = await res.json();
+    if (data.success) {
+      status.textContent = '✅ Foto subida';
+      status.style.color = '#2E7D32';
+      return data.data.url;
+    } else {
+      status.textContent = '⚠️ Error al subir la foto';
+      return '';
+    }
+  } catch {
+    status.textContent = '⚠️ Error al subir la foto';
+    return '';
+  }
+}
+
+function validar() {
+  const reqs = [
+    { id:'fCodigo',  msg:'Escribe el código de tu placa (ej. BT-001)' },
+    { id:'fNombre',  msg:'Escribe el nombre del bautizado/a' },
+    { id:'fFecha',   msg:'Selecciona la fecha del bautizo' },
+    { id:'fPadre',   msg:'Escribe el nombre del papá' },
+    { id:'fMadre',   msg:'Escribe el nombre de la mamá' },
+    { id:'fMensaje', msg:'Escribe un mensaje de los papás' },
+  ];
+  for (const r of reqs) {
+    const el = document.getElementById(r.id);
+    if (!el.value.trim()) {
+      el.style.borderColor = '#FF5252';
+      el.focus();
+      alert('⚠️ ' + r.msg);
+      return false;
+    }
+    el.style.borderColor = '#C5D0F0';
+  }
+  const musicaOpt = document.querySelector('input[name="musica"]:checked').value;
+  if (musicaOpt === 'personalizada' && !document.getElementById('fMusicaUrl').value.trim()) {
+    alert('⚠️ Pega el link de tu canción o elige otra opción de música');
+    return false;
+  }
+  return true;
+}
+
+async function enviar() {
+  if (!validar()) return;
+
+  const btn = document.getElementById('btnEnviar');
+  btn.disabled = true;
+  btn.textContent = '⏳ Enviando…';
+
+  const fotoUrl = await subirFotoImgBB();
+
+  const codigo    = document.getElementById('fCodigo').value.trim().toUpperCase();
+  const musicaOpt = document.querySelector('input[name="musica"]:checked').value;
+  const musicaUrl = document.getElementById('fMusicaUrl').value.trim();
+
+  const fechaRaw = document.getElementById('fFecha').value;
+  const fechaBonita = fechaRaw
+    ? new Date(fechaRaw + 'T12:00:00').toLocaleDateString('es-MX', { day:'numeric', month:'long', year:'numeric' })
+    : '';
+
+  const params = new URLSearchParams();
+  params.append(ENTRY.codigo,    codigo);
+  params.append(ENTRY.foto,      fotoUrl);
+  params.append(ENTRY.nombre,    document.getElementById('fNombre').value.trim());
+  params.append(ENTRY.fecha,     fechaBonita);
+  params.append(ENTRY.sexo,      document.getElementById('fSexo').value);
+  params.append(ENTRY.padre,     document.getElementById('fPadre').value.trim());
+  params.append(ENTRY.madre,     document.getElementById('fMadre').value.trim());
+  params.append(ENTRY.mensaje,   document.getElementById('fMensaje').value.trim());
+  params.append(ENTRY.musica,    musicaOpt);
+  params.append(ENTRY.musicaUrl, musicaUrl);
+
+  fetch(GOOGLE_FORM_ACTION, {
+    method:'POST', mode:'no-cors',
+    headers:{'Content-Type':'application/x-www-form-urlencoded'},
+    body:params.toString()
+  });
+
+  document.getElementById('successCodigo').textContent = codigo;
+  document.getElementById('formArea').style.display = 'none';
+  document.getElementById('successScreen').classList.add('show');
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+</script>
+</body>
+</html>
