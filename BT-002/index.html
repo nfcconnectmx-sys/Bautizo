@@ -3,1348 +3,662 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>✝️ Recuerdo de Bautizo</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet">
+<title>✝️ Bautizo de D</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
-:root {
-  --navy:#080F3A;
-  --blue:#0D47A1;
-  --blue2:#1565C0;
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --cream:#FDF8F0;
   --gold:#C9A84C;
-  --gold-bright:#FFD700;
-  --gold-light:#FFF8E7;
-  --cream:#FEFAF2;
-  --white:#FFFFFF;
-  --mid:#3A4A6B;
-  --shadow:rgba(8,15,58,0.18);
+  --gold2:#F0D080;
+  --dark:#1A1205;
+  --blue:#1A3A6B;
+  --green:#4A7C59;
 }
+html,body{width:100%;max-width:440px;margin:0 auto;overflow-x:hidden;background:var(--cream);font-family:'Nunito',sans-serif;}
 
-html { scroll-behavior: smooth; }
-body {
-  background: linear-gradient(170deg, #060C2E 0%, #0D1B5E 30%, #102060 60%, #0a1540 100%);
-  font-family: 'Nunito', sans-serif;
-  min-height: 100vh;
-  max-width: 440px;
-  margin: 0 auto;
-  overflow-x: hidden;
-  position: relative;
+/* ===== CORTINA ===== */
+#curtain{
+  position:fixed;inset:0;z-index:9999;
+  display:flex;
 }
-
-/* ===== CANVAS STARS ===== */
-#stars-canvas {
-  position: fixed;
-  top:0; left:0; width:100%; height:100%;
-  pointer-events: none;
-  z-index: 0;
-  max-width: 440px;
+.curtain-half{
+  width:50%;height:100%;
+  background:linear-gradient(135deg,#1A3A6B 0%,#0D1B5E 100%);
+  transition:transform 1.2s cubic-bezier(.77,0,.175,1);
+  position:relative;overflow:hidden;
 }
-
-/* ===== HERO ===== */
-.hero {
-  position: relative;
-  padding: 0 0 60px;
-  text-align: center;
-  overflow: hidden;
-  z-index: 2;
-}
-
-/* Rayos de luz de fondo */
-.hero-rays {
-  position: absolute;
-  top: 0; left: 50%;
-  transform: translateX(-50%);
-  width: 600px; height: 420px;
-  background: conic-gradient(from 270deg at 50% 0%,
-    transparent 0deg,
-    rgba(201,168,76,0.04) 5deg,
-    transparent 10deg,
-    rgba(201,168,76,0.06) 18deg,
-    transparent 24deg,
-    rgba(201,168,76,0.03) 32deg,
-    transparent 38deg,
-    rgba(201,168,76,0.05) 45deg,
-    transparent 50deg
+.curtain-half::before{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(
+    90deg,
+    transparent,transparent 20px,
+    rgba(201,168,76,.06) 20px,rgba(201,168,76,.06) 21px
   );
-  animation: rays-rotate 20s linear infinite;
-  pointer-events: none;
 }
-@keyframes rays-rotate {
-  from { transform: translateX(-50%) rotate(0deg); }
-  to   { transform: translateX(-50%) rotate(360deg); }
+.curtain-left{transform-origin:left center;}
+.curtain-right{transform-origin:right center;}
+.curtain-open .curtain-left{transform:translateX(-100%);}
+.curtain-open .curtain-right{transform:translateX(100%);}
+.curtain-icon{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  font-size:48px;
+  animation:crossglow 2s ease-in-out infinite;
 }
-
-/* Cruz central */
-.cross-wrap {
-  padding-top: 48px;
-  position: relative;
-  display: inline-block;
-}
-
-.cross-glow {
-  font-size: 72px;
-  display: block;
-  filter: drop-shadow(0 0 10px var(--gold-bright)) drop-shadow(0 0 30px rgba(255,215,0,0.4));
-  animation: cross-pulse 3s ease-in-out infinite;
-  position: relative;
-  z-index: 2;
-}
-@keyframes cross-pulse {
-  0%,100% { filter: drop-shadow(0 0 8px var(--gold-bright)) drop-shadow(0 0 20px rgba(255,215,0,0.35)); transform: scale(1); }
-  50%      { filter: drop-shadow(0 0 22px var(--gold-bright)) drop-shadow(0 0 50px rgba(255,215,0,0.7)); transform: scale(1.06); }
+.curtain-left .curtain-icon{left:80%;}
+.curtain-right .curtain-icon{left:20%;}
+@keyframes crossglow{
+  0%,100%{filter:drop-shadow(0 0 8px #FFD700);}
+  50%{filter:drop-shadow(0 0 24px #FFD700) drop-shadow(0 0 48px rgba(255,215,0,.5));}
 }
 
-/* Halo alrededor de la cruz */
-.cross-halo {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 110px; height: 110px;
-  border-radius: 50%;
-  border: 2px solid rgba(201,168,76,0.35);
-  box-shadow: 0 0 20px rgba(201,168,76,0.2), inset 0 0 20px rgba(201,168,76,0.1);
-  animation: halo-breathe 3s ease-in-out infinite;
+/* ===== ESCENAS ===== */
+.scene{
+  position:fixed;inset:0;
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  background:var(--cream);
+  z-index:100;
+  overflow:hidden;
 }
-@keyframes halo-breathe {
-  0%,100% { transform: translate(-50%,-50%) scale(1); opacity: 0.6; }
-  50%      { transform: translate(-50%,-50%) scale(1.12); opacity: 1; }
+.scene.active{display:flex;}
+
+/* ===== CANVAS SVG FONDO ===== */
+.bg-canvas{
+  position:absolute;inset:0;
+  pointer-events:none;
+  z-index:0;
 }
 
-/* Paloma */
-.dove-float {
-  font-size: 32px;
-  display: inline-block;
-  margin-left: 12px;
-  animation: dove-bob 4s ease-in-out infinite;
-  filter: drop-shadow(0 4px 10px rgba(255,255,255,0.4));
-}
-@keyframes dove-bob {
-  0%,100% { transform: translateY(0) rotate(-6deg); }
-  50%      { transform: translateY(-12px) rotate(6deg); }
+/* ===== RAMITAS SVG animadas ===== */
+.branch{
+  position:absolute;
+  pointer-events:none;
 }
 
-/* Títulos hero */
-.hero-eyebrow {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 12px;
-  color: rgba(201,168,76,0.85);
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  margin: 18px 0 14px;
+/* ===== PALOMAS ===== */
+.dove{
+  position:absolute;
+  font-size:24px;
+  pointer-events:none;
+  animation:dove-fly linear infinite;
+  opacity:0.85;
+}
+@keyframes dove-fly{
+  0%{transform:translateX(-80px) translateY(0);}
+  25%{transform:translateX(calc(var(--w)*0.3) + translateY(-20px));}
+  50%{transform:translateX(calc(var(--w)*0.6)) translateY(10px);}
+  75%{transform:translateX(calc(var(--w)*0.8)) translateY(-15px);}
+  100%{transform:translateX(calc(var(--w) + 80px)) translateY(0);}
 }
 
-.hero-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 34px;
-  color: white;
-  line-height: 1.15;
-  text-shadow: 0 4px 20px rgba(0,0,0,0.4);
-  position: relative;
-  z-index: 1;
+/* ===== HOJITAS ===== */
+.leaf{
+  position:absolute;
+  font-size:14px;
+  pointer-events:none;
+  animation:leaf-fall linear infinite;
+  opacity:0.7;
 }
-.hero-title em {
-  font-style: italic;
-  color: var(--gold-bright);
-  display: block;
-}
-
-.hero-verse {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 14px;
-  color: rgba(255,255,255,0.78);
-  font-style: italic;
-  margin: 14px 24px 0;
-  line-height: 1.6;
-  letter-spacing: 0.3px;
+@keyframes leaf-fall{
+  0%{transform:translateY(-30px) rotate(0deg) translateX(0);}
+  33%{transform:translateY(33vh) rotate(120deg) translateX(20px);}
+  66%{transform:translateY(66vh) rotate(240deg) translateX(-15px);}
+  100%{transform:translateY(110vh) rotate(360deg) translateX(10px);}
 }
 
-/* Separador dorado */
-.gold-divider {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 20px auto 0;
-  width: 260px;
+/* ===== ESCENA 1 - CRUZ ===== */
+#scene1{background:var(--cream);}
+.s1-cross-wrap{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;align-items:center;
+  margin-top:60px;
 }
-.gold-line {
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(to right, transparent, rgba(201,168,76,0.7));
+.s1-cross-svg{
+  width:180px;height:220px;
+  animation:cross-breathe 3s ease-in-out infinite;
+  filter:drop-shadow(0 8px 32px rgba(201,168,76,.4));
 }
-.gold-line.r { background: linear-gradient(to left, transparent, rgba(201,168,76,0.7)); }
-.gold-star { color: var(--gold); font-size: 14px; animation: spin-slow 10s linear infinite; }
-@keyframes spin-slow { to { transform: rotate(360deg); } }
-
-/* Curva inferior hero */
-.hero-curve {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 50px;
-  background: #f0f5ff;
-  border-radius: 50px 50px 0 0;
-  z-index: 3;
+@keyframes cross-breathe{
+  0%,100%{transform:scale(1);}
+  50%{transform:scale(1.04);}
 }
-
-/* ===== BANNER AVISO ===== */
-.banner {
-  position: relative;
-  z-index: 4;
-  background: linear-gradient(135deg, var(--gold) 0%, #e8b830 100%);
-  margin: -8px 16px 0;
-  border-radius: 20px;
-  padding: 16px 20px;
-  text-align: center;
-  box-shadow: 0 6px 24px rgba(201,168,76,0.45);
+.s1-halo{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:220px;height:220px;
+  border-radius:50%;
+  border:2px solid rgba(201,168,76,.3);
+  animation:halo-expand 3s ease-in-out infinite;
+  pointer-events:none;
 }
-.banner p {
-  font-size: 13px;
-  font-weight: 900;
-  color: #1a0f00;
-  line-height: 1.6;
+.s1-halo2{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:260px;height:260px;
+  border-radius:50%;
+  border:1px solid rgba(201,168,76,.15);
+  animation:halo-expand 3s ease-in-out infinite .6s;
+  pointer-events:none;
 }
-
-/* ===== CONTENIDO ===== */
-.content {
-  background: #f0f5ff;
-  position: relative;
-  z-index: 4;
-  padding: 20px 16px 60px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+@keyframes halo-expand{
+  0%,100%{transform:translate(-50%,-50%) scale(.95);opacity:.6;}
+  50%{transform:translate(-50%,-50%) scale(1.08);opacity:1;}
 }
-
-/* ===== CARDS ===== */
-.card {
-  background: white;
-  border-radius: 24px;
-  padding: 22px 20px;
-  box-shadow: 0 6px 28px var(--shadow);
-  border: 1px solid rgba(201,168,76,0.1);
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  animation: card-rise 0.5s ease both;
+.s1-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:13px;color:var(--gold);
+  letter-spacing:4px;text-transform:uppercase;
+  margin-top:28px;z-index:2;
 }
-.card:nth-child(1) { animation-delay: 0.05s; }
-.card:nth-child(2) { animation-delay: 0.1s; }
-.card:nth-child(3) { animation-delay: 0.15s; }
-.card:nth-child(4) { animation-delay: 0.2s; }
-.card:nth-child(5) { animation-delay: 0.25s; }
-.card:nth-child(6) { animation-delay: 0.3s; }
-@keyframes card-rise {
-  from { opacity:0; transform: translateY(24px); }
-  to   { opacity:1; transform: translateY(0); }
+.s1-name{
+  font-family:'Playfair Display',serif;
+  font-size:36px;color:var(--dark);
+  margin-top:8px;z-index:2;
+  text-align:center;
 }
-.card:focus-within {
-  box-shadow: 0 8px 32px rgba(13,71,161,0.18), 0 0 0 2px rgba(201,168,76,0.25);
+.s1-verse{
+  font-family:'Cormorant Garamond',serif;
+  font-size:15px;color:var(--blue);
+  font-style:italic;margin-top:12px;z-index:2;
+  text-align:center;max-width:300px;line-height:1.6;
 }
 
-/* Borde superior decorativo por card */
-.card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--blue2), rgba(201,168,76,0.8), var(--blue2));
-  background-size: 200%;
-  animation: shimmer 4s linear infinite;
+/* ===== ESCENA 2 - FOTO ===== */
+#scene2{background:var(--cream);}
+.s2-frame{
+  position:relative;z-index:2;
+  width:280px;
+  background:white;
+  border:3px solid var(--gold);
+  border-radius:20px;
+  padding:16px;
+  box-shadow:0 12px 48px rgba(201,168,76,.25),0 4px 16px rgba(0,0,0,.08);
+  margin-top:40px;
 }
-@keyframes shimmer {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+.s2-frame::before{
+  content:'';position:absolute;
+  inset:6px;border-radius:14px;
+  border:1px solid rgba(201,168,76,.3);
+  pointer-events:none;
 }
-
-.card-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 15px;
-  letter-spacing: 0.5px;
-  color: var(--navy);
-  text-transform: uppercase;
-  margin-bottom: 18px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.s2-foto{
+  width:100%;height:320px;
+  object-fit:cover;border-radius:12px;
+  display:block;
 }
-.card-title-icon {
-  width: 32px; height: 32px;
-  background: linear-gradient(135deg, var(--navy), var(--blue2));
-  border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 15px;
-  flex-shrink: 0;
-  box-shadow: 0 3px 10px rgba(13,71,161,0.3);
+.s2-foto-avatar{
+  width:100%;height:320px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:12px;
+  background:linear-gradient(135deg,#E8EFF8,#D5E3F5);
 }
-.card-title-text { flex: 1; }
-.card-title::after {
-  content: '';
-  width: 40px;
-  height: 1.5px;
-  background: linear-gradient(to right, rgba(201,168,76,0.6), transparent);
-  flex-shrink: 0;
+.s2-label{
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;color:var(--dark);
+  text-align:center;margin-top:14px;z-index:2;
+  font-style:italic;
+}
+.s2-fecha{
+  font-size:12px;color:var(--gold);
+  font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  text-align:center;margin-top:6px;z-index:2;
 }
 
-/* ===== CÓDIGO PLACA ===== */
-.codigo-wrap {
-  background: linear-gradient(135deg, var(--navy) 0%, #0a1850 100%);
-  border-radius: 18px;
-  padding: 20px;
-  border: 1px solid rgba(201,168,76,0.2);
-  box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+/* ===== ESCENA 3 - DATOS ===== */
+#scene3{background:var(--cream);}
+.s3-content{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;align-items:center;
+  gap:16px;padding:20px;width:100%;max-width:360px;
+  margin-top:40px;
 }
-.codigo-wrap label {
-  font-size: 11px;
-  color: rgba(201,168,76,0.8);
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  display: block;
-  margin-bottom: 10px;
+.s3-nombre{
+  font-family:'Playfair Display',serif;
+  font-size:38px;color:var(--dark);
+  text-align:center;line-height:1.1;
 }
-.codigo-wrap input {
-  background: rgba(10,18,64,0.8);
-  border: 1.5px solid rgba(201,168,76,0.3);
-  color: var(--gold-bright);
-  font-family: 'Playfair Display', serif;
-  font-size: 26px;
-  letter-spacing: 6px;
-  padding: 14px 18px;
-  border-radius: 14px;
-  width: 100%;
-  outline: none;
-  text-transform: uppercase;
-  text-align: center;
-  transition: border-color 0.3s, box-shadow 0.3s;
-  box-shadow: 0 0 0 0 rgba(201,168,76,0);
+.s3-nombre span{color:var(--gold);}
+.s3-divider{
+  display:flex;align-items:center;gap:10px;width:200px;
 }
-.codigo-wrap input:focus {
-  border-color: var(--gold);
-  box-shadow: 0 0 0 3px rgba(201,168,76,0.2), 0 0 20px rgba(201,168,76,0.15);
+.s3-line{flex:1;height:1px;background:linear-gradient(to right,transparent,var(--gold));}
+.s3-line.r{background:linear-gradient(to left,transparent,var(--gold));}
+.s3-star{color:var(--gold);font-size:12px;}
+.s3-fecha{
+  font-family:'Cormorant Garamond',serif;
+  font-size:16px;color:var(--blue);
+  font-style:italic;letter-spacing:1px;
 }
-.codigo-hint {
-  font-size: 11px;
-  color: rgba(120,140,190,0.9);
-  margin-top: 10px;
-  font-weight: 600;
-  text-align: center;
+.s3-papas{
+  background:white;border:1px solid rgba(201,168,76,.25);
+  border-radius:20px;padding:20px 28px;
+  box-shadow:0 4px 20px rgba(0,0,0,.06);
+  display:flex;gap:32px;
+}
+.s3-papa{text-align:center;}
+.s3-papa-icon{font-size:28px;margin-bottom:4px;}
+.s3-papa-label{font-size:10px;color:#999;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
+.s3-papa-name{
+  font-family:'Playfair Display',serif;
+  font-size:16px;color:var(--dark);margin-top:2px;
 }
 
-/* ===== CAMPOS ===== */
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-bottom: 14px;
+/* ===== ESCENA 4 - VERSÍCULOS ===== */
+#scene4{background:var(--cream);justify-content:flex-start;padding-top:60px;}
+.s4-content{
+  position:relative;z-index:2;
+  width:100%;max-width:380px;
+  padding:0 20px 40px;
+  overflow-y:auto;
+  max-height:100vh;
 }
-.field:last-child { margin-bottom: 0; }
-.field label {
-  font-size: 11px;
-  color: var(--mid);
-  font-weight: 700;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
+.s4-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:13px;color:var(--gold);
+  letter-spacing:4px;text-transform:uppercase;
+  text-align:center;margin-bottom:20px;
 }
-.field input,
-.field select,
-.field textarea {
-  background: #F5F8FF;
-  border: 1.5px solid #C5D0F0;
-  color: var(--navy);
-  font-family: 'Nunito', sans-serif;
-  font-size: 15px;
-  font-weight: 600;
-  padding: 13px 16px;
-  border-radius: 14px;
-  width: 100%;
-  outline: none;
-  transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+.s4-verse{
+  background:white;border-left:3px solid var(--gold);
+  border-radius:0 16px 16px 0;
+  padding:18px 20px;margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.06);
+  animation:verse-in .6s ease both;
 }
-.field input:focus,
-.field select:focus,
-.field textarea:focus {
-  border-color: var(--blue2);
-  background: white;
-  box-shadow: 0 0 0 3px rgba(21,101,192,0.1);
+.s4-verse:nth-child(2){animation-delay:.1s;}
+.s4-verse:nth-child(3){animation-delay:.2s;}
+.s4-verse:nth-child(4){animation-delay:.3s;}
+@keyframes verse-in{
+  from{opacity:0;transform:translateX(-16px);}
+  to{opacity:1;transform:translateX(0);}
 }
-.field textarea { resize: none; height: 90px; }
+.s4-verse-text{
+  font-family:'Cormorant Garamond',serif;
+  font-size:15px;color:var(--dark);
+  font-style:italic;line-height:1.7;
+}
+.s4-verse-ref{
+  font-size:11px;color:var(--gold);
+  font-weight:700;letter-spacing:1.5px;
+  text-transform:uppercase;margin-top:8px;
+}
+.s4-prayer{
+  background:linear-gradient(135deg,#1A3A6B,#0D2755);
+  border-radius:20px;padding:24px;
+  margin-bottom:12px;text-align:center;
+  box-shadow:0 6px 24px rgba(26,58,107,.25);
+}
+.s4-prayer-text{
+  font-family:'Cormorant Garamond',serif;
+  font-size:15px;color:rgba(255,255,255,.92);
+  font-style:italic;line-height:1.8;
+}
+.s4-prayer-amen{
+  font-size:18px;color:var(--gold2);
+  font-weight:700;letter-spacing:3px;margin-top:14px;
+}
+.s4-audio{
+  background:white;border:1px solid rgba(201,168,76,.2);
+  border-radius:16px;padding:16px;margin-bottom:12px;
+}
+.s4-audio-label{
+  font-size:11px;color:var(--gold);font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;
+}
+.s4-footer{
+  text-align:center;padding:12px 0 20px;
+  font-size:11px;color:#aaa;font-weight:700;letter-spacing:1px;
+}
+.s4-footer span{color:var(--gold);}
 
-.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+/* ===== PROGRESS DOTS ===== */
+.progress-dots{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  z-index:200;display:flex;gap:8px;
+}
+.dot{
+  width:8px;height:8px;border-radius:50%;
+  background:rgba(201,168,76,.3);
+  transition:all .3s;cursor:pointer;
+}
+.dot.active{background:var(--gold);transform:scale(1.3);}
 
-/* ===== ZONA FOTO ===== */
-.foto-zona {
-  border: 2px dashed rgba(21,101,192,0.35);
-  border-radius: 18px;
-  padding: 32px 16px;
-  text-align: center;
-  cursor: pointer;
-  background: linear-gradient(135deg, #F0F5FF, #EAF0FF);
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
+/* ===== BOTÓN SIGUIENTE ===== */
+.btn-next{
+  position:fixed;bottom:60px;right:20px;
+  z-index:200;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:white;font-weight:900;font-size:13px;
+  border:none;border-radius:50px;
+  padding:10px 20px;cursor:pointer;
+  box-shadow:0 4px 16px rgba(201,168,76,.4);
+  display:flex;align-items:center;gap:6px;
+  letter-spacing:1px;
+  transition:transform .15s;
 }
-.foto-zona::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(21,101,192,0.03), transparent);
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-.foto-zona:hover { border-color: var(--blue2); background: #E8EFFF; }
-.foto-zona:hover::before { opacity: 1; }
-.foto-icon { font-size: 52px; margin-bottom: 12px; display: block; }
-.foto-text { font-size: 15px; font-weight: 800; color: var(--blue2); }
-.foto-sub  { font-size: 12px; color: var(--mid); font-weight: 700; margin-top: 4px; }
-
-/* ===== MENSAJE PREVIEW ===== */
-.mensaje-preview {
-  background: linear-gradient(135deg, #060F3A, #0D47A1);
-  border-radius: 18px;
-  padding: 20px;
-  margin-top: 12px;
-  display: none;
-  border: 1px solid rgba(201,168,76,0.2);
-  box-shadow: 0 4px 20px rgba(8,15,58,0.3);
-}
-.mensaje-preview.visible { display: block; animation: fade-in 0.4s ease; }
-@keyframes fade-in { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
-.mensaje-preview::before {
-  content: '❝';
-  font-family: 'Playfair Display', serif;
-  font-size: 40px;
-  color: rgba(201,168,76,0.3);
-  display: block;
-  line-height: 1;
-  margin-bottom: 6px;
-}
-.mensaje-preview p {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 16px;
-  color: rgba(255,255,255,0.9);
-  line-height: 1.75;
-  font-style: italic;
-  text-align: center;
-}
-
-/* ===== MÚSICA ===== */
-.music-opts { display: flex; flex-direction: column; gap: 10px; }
-.music-opt {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 14px 16px;
-  border-radius: 16px;
-  border: 1.5px solid #C5D0F0;
-  cursor: pointer;
-  transition: all 0.25s;
-  background: #F5F8FF;
-}
-.music-opt:has(input:checked) {
-  border-color: var(--blue2);
-  background: white;
-  box-shadow: 0 3px 14px rgba(21,101,192,0.15);
-}
-.music-opt input[type="radio"] { accent-color: var(--blue2); width: 18px; height: 18px; flex-shrink: 0; }
-.music-opt-label { font-size: 14px; font-weight: 800; color: var(--navy); }
-.music-opt-sub   { font-size: 11px; color: var(--mid); font-weight: 600; }
-.url-campo { display: none; margin-top: 12px; }
-.url-campo.visible { display: block; animation: fade-in 0.3s ease; }
-
-/* ===== BOTÓN ENVIAR ===== */
-.btn-enviar {
-  background: linear-gradient(135deg, #060F3A 0%, #0D47A1 50%, #1565C0 100%);
-  background-size: 200% 200%;
-  color: white;
-  font-family: 'Playfair Display', serif;
-  font-size: 19px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  padding: 22px 20px;
-  border-radius: 20px;
-  border: none;
-  width: 100%;
-  cursor: pointer;
-  box-shadow: 0 8px 32px rgba(8,15,58,0.45);
-  transition: transform 0.2s, box-shadow 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  position: relative;
-  overflow: hidden;
-  animation: btn-glow 4s ease infinite;
-}
-@keyframes btn-glow {
-  0%,100% { background-position: 0% 50%; }
-  50%      { background-position: 100% 50%; }
-}
-.btn-enviar::before {
-  content: '';
-  position: absolute;
-  top: -50%; left: -60%;
-  width: 40%; height: 200%;
-  background: rgba(255,255,255,0.15);
-  transform: skewX(-20deg);
-  transition: left 0.6s ease;
-}
-.btn-enviar:hover::before { left: 130%; }
-.btn-enviar:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(8,15,58,0.55); }
-.btn-enviar:active { transform: scale(0.98); }
-.btn-enviar:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-
-/* Borde dorado decorativo en botón */
-.btn-enviar::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 20px;
-  border: 1px solid rgba(201,168,76,0.4);
-  pointer-events: none;
-}
-
-/* ===== PANTALLA DE ÉXITO ===== */
-.success-screen {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  min-height: 100vh;
-  padding: 0 0 60px;
-  position: relative;
-  z-index: 4;
-}
-.success-screen.show { display: flex; }
-
-/* Hero de éxito */
-.success-hero {
-  width: 100%;
-  background: linear-gradient(170deg, #060C2E 0%, #0D1B5E 50%, #102060 100%);
-  padding: 50px 24px 80px;
-  position: relative;
-  overflow: hidden;
-  text-align: center;
-}
-.success-hero-rays {
-  position: absolute;
-  top: 0; left: 50%;
-  transform: translateX(-50%);
-  width: 500px; height: 400px;
-  background: conic-gradient(from 270deg at 50% 0%,
-    transparent 0deg, rgba(201,168,76,0.05) 6deg, transparent 12deg,
-    rgba(201,168,76,0.07) 20deg, transparent 26deg,
-    rgba(201,168,76,0.04) 34deg, transparent 40deg
-  );
-  animation: rays-rotate 15s linear infinite;
-  pointer-events: none;
-}
-.success-hero-curve {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 50px;
-  background: #f0f5ff;
-  border-radius: 50px 50px 0 0;
-  z-index: 2;
-}
-
-/* Ángel / cruz animados éxito */
-.success-angel-wrap {
-  position: relative;
-  display: inline-block;
-  margin-bottom: 16px;
-}
-.success-cross {
-  font-size: 86px;
-  display: block;
-  animation: cross-pulse 3s ease-in-out infinite;
-  position: relative;
-  z-index: 2;
-}
-.success-halo {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 130px; height: 130px;
-  border-radius: 50%;
-  border: 2px solid rgba(201,168,76,0.4);
-  box-shadow: 0 0 30px rgba(201,168,76,0.25), inset 0 0 30px rgba(201,168,76,0.1);
-  animation: halo-breathe 2.5s ease-in-out infinite;
-}
-.success-dove {
-  font-size: 36px;
-  display: inline-block;
-  animation: dove-bob 4s ease-in-out infinite;
-  margin-left: 16px;
-  filter: drop-shadow(0 4px 12px rgba(255,255,255,0.5));
-}
-
-.success-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 36px;
-  color: white;
-  line-height: 1.15;
-  text-shadow: 0 4px 20px rgba(0,0,0,0.4);
-  position: relative; z-index: 2;
-}
-.success-title em { color: var(--gold-bright); font-style: italic; }
-
-.success-verse {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 14px;
-  color: rgba(255,255,255,0.78);
-  font-style: italic;
-  margin: 14px 20px 0;
-  line-height: 1.65;
-  position: relative; z-index: 2;
-}
-
-/* Cuerpo éxito */
-.success-body {
-  background: #f0f5ff;
-  width: 100%;
-  padding: 24px 16px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-/* Card de datos confirmados */
-.confirm-card {
-  background: white;
-  border-radius: 24px;
-  padding: 24px 20px;
-  box-shadow: 0 6px 28px var(--shadow);
-  border: 1px solid rgba(201,168,76,0.12);
-  position: relative;
-  overflow: hidden;
-  animation: card-rise 0.6s ease both;
-}
-.confirm-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--blue2), var(--gold), var(--blue2));
-  background-size: 200%;
-  animation: shimmer 3s linear infinite;
-}
-
-/* Badge de código */
-.codigo-badge-wrap {
-  background: linear-gradient(135deg, var(--navy), #0a1850);
-  border-radius: 18px;
-  padding: 22px;
-  text-align: center;
-  border: 1px solid rgba(201,168,76,0.25);
-  box-shadow: inset 0 2px 12px rgba(0,0,0,0.3), 0 0 30px rgba(201,168,76,0.1);
-}
-.codigo-badge-label {
-  font-size: 11px;
-  color: rgba(201,168,76,0.8);
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  font-weight: 700;
-  margin-bottom: 10px;
-}
-.codigo-badge-value {
-  font-family: 'Playfair Display', serif;
-  font-size: 38px;
-  color: var(--gold-bright);
-  letter-spacing: 8px;
-  text-shadow: 0 0 20px rgba(255,215,0,0.5), 0 0 40px rgba(255,215,0,0.2);
-  animation: code-glow 2s ease-in-out infinite alternate;
-}
-@keyframes code-glow {
-  from { text-shadow: 0 0 15px rgba(255,215,0,0.4), 0 0 30px rgba(255,215,0,0.15); }
-  to   { text-shadow: 0 0 25px rgba(255,215,0,0.7), 0 0 50px rgba(255,215,0,0.35), 0 0 80px rgba(255,215,0,0.1); }
-}
-
-/* Lista de datos confirmados */
-.data-list { display: flex; flex-direction: column; gap: 0; }
-.data-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  padding: 14px 0;
-  border-bottom: 1px solid rgba(201,168,76,0.1);
-}
-.data-row:last-child { border-bottom: none; }
-.data-icon {
-  width: 36px; height: 36px;
-  background: linear-gradient(135deg, #E8EFFF, #D5E3FF);
-  border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px;
-  flex-shrink: 0;
-}
-.data-content { flex: 1; }
-.data-label {
-  font-size: 10px;
-  color: var(--mid);
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  margin-bottom: 3px;
-}
-.data-value {
-  font-family: 'Playfair Display', serif;
-  font-size: 16px;
-  color: var(--navy);
-  font-weight: 600;
-}
-
-/* Badge verde enviado */
-.sent-badge {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  background: linear-gradient(135deg, #E8F5E9, #F1F8E9);
-  border: 1.5px solid #A5D6A7;
-  color: #1B5E20;
-  font-size: 14px;
-  font-weight: 900;
-  padding: 16px 22px;
-  border-radius: 18px;
-  box-shadow: 0 3px 14px rgba(46,125,50,0.15);
-}
-.sent-badge-icon { font-size: 24px; animation: bounce-check 0.6s ease 0.3s both; }
-@keyframes bounce-check {
-  0%  { transform: scale(0); }
-  60% { transform: scale(1.3); }
-  100%{ transform: scale(1); }
-}
-
-/* Mensaje bíblico */
-.bible-card {
-  background: linear-gradient(135deg, #060F3A, #0D47A1);
-  border-radius: 24px;
-  padding: 28px 22px;
-  text-align: center;
-  border: 1px solid rgba(201,168,76,0.2);
-  box-shadow: 0 8px 32px rgba(8,15,58,0.35);
-  position: relative;
-  overflow: hidden;
-  animation: card-rise 0.7s ease 0.1s both;
-}
-.bible-card::before {
-  content: '✝';
-  font-family: 'Playfair Display', serif;
-  font-size: 160px;
-  color: rgba(255,255,255,0.03);
-  position: absolute;
-  top: -20px; right: -20px;
-  line-height: 1;
-  pointer-events: none;
-}
-.bible-card-verse {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 18px;
-  color: white;
-  line-height: 1.75;
-  font-style: italic;
-  margin-bottom: 14px;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  position: relative;
-  z-index: 1;
-}
-.bible-card-ref {
-  font-size: 12px;
-  color: rgba(201,168,76,0.85);
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  font-weight: 700;
-  position: relative;
-  z-index: 1;
-}
-.bible-divider {
-  width: 60px;
-  height: 1px;
-  background: rgba(201,168,76,0.4);
-  margin: 14px auto;
-}
-
-/* Mensaje espera */
-.wait-card {
-  background: white;
-  border-radius: 24px;
-  padding: 24px 20px;
-  text-align: center;
-  box-shadow: 0 6px 28px var(--shadow);
-  border: 1px solid rgba(201,168,76,0.1);
-  animation: card-rise 0.7s ease 0.2s both;
-}
-.wait-hours {
-  font-family: 'Playfair Display', serif;
-  font-size: 52px;
-  font-weight: 700;
-  color: var(--navy);
-  line-height: 1;
-  position: relative;
-  display: inline-block;
-}
-.wait-hours::after {
-  content: 'horas';
-  font-size: 16px;
-  color: var(--mid);
-  display: block;
-  font-family: 'Nunito', sans-serif;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  font-weight: 700;
-}
-.wait-text {
-  font-size: 14px;
-  color: var(--mid);
-  font-weight: 600;
-  margin-top: 10px;
-  line-height: 1.6;
-}
-
-/* Confetti canvas */
-#confetti-canvas {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  pointer-events: none;
-  z-index: 50;
-  max-width: 440px;
-}
-
-/* ===== FOOTER ===== */
-.footer {
-  text-align: center;
-  padding: 4px 0 0;
-  font-size: 11px;
-  color: #7A8EC0;
-  font-weight: 700;
-  letter-spacing: 1px;
-}
-.footer span { color: var(--blue2); }
+.btn-next:active{transform:scale(.95);}
+.btn-next.hidden{display:none;}
 </style>
 </head>
 <body>
 
-<canvas id="stars-canvas"></canvas>
-<canvas id="confetti-canvas"></canvas>
+<!-- AUDIO -->
+<audio id="bgAudio" loop>
+  <source src="https://archive.org/download/AmazingGraceInstrumental/amazing_grace_instrumental.mp3" type="audio/mpeg">
+</audio>
 
-<!-- ===== FORMULARIO ===== -->
-<div id="formArea">
+<!-- CORTINA -->
+<div id="curtain">
+  <div class="curtain-half curtain-left"><div class="curtain-icon">✝️</div></div>
+  <div class="curtain-half curtain-right"><div class="curtain-icon">🕊️</div></div>
+</div>
 
-  <div class="hero">
-    <div class="hero-rays"></div>
-    <div class="cross-wrap">
-      <div class="cross-halo"></div>
-      <span class="cross-glow">✝️</span>
-    </div>
-    <span class="dove-float">🕊️</span>
-    <div class="hero-eyebrow">Recuerdo Inteligente de Bautizo</div>
-    <h1 class="hero-title">Activa tu<br><em>Recuerdo</em><br>Sagrado</h1>
-    <p class="hero-verse">"El que crea y sea bautizado será salvo"<br>— Marcos 16:16</p>
-    <div class="gold-divider">
-      <div class="gold-line"></div>
-      <span class="gold-star">✦</span>
-      <div class="gold-line r"></div>
-    </div>
-    <div class="hero-curve"></div>
-  </div>
+<!-- PROGRESS DOTS -->
+<div class="progress-dots" id="progressDots">
+  <div class="dot active" onclick="goScene(0)"></div>
+  <div class="dot" onclick="goScene(1)"></div>
+  <div class="dot" onclick="goScene(2)"></div>
+  <div class="dot" onclick="goScene(3)"></div>
+</div>
 
-  <div class="banner">
-    <p>📋 Llena los datos a continuación.<br>Tu página de bautizo estará lista en <strong>24 horas</strong> ✅</p>
-  </div>
+<!-- BOTÓN SIGUIENTE -->
+<button class="btn-next" id="btnNext" onclick="nextScene()">Siguiente ›</button>
 
-  <div class="content">
+<!-- ===== ESCENA 1: CRUZ ===== -->
+<div class="scene active" id="scene1">
+  <svg class="bg-canvas" id="bgBranches1" xmlns="http://www.w3.org/2000/svg"></svg>
 
-    <!-- CÓDIGO -->
-    <div class="card">
-      <div class="card-title">
-        <div class="card-title-icon">🏷️</div>
-        <div class="card-title-text">Código de tu placa</div>
-      </div>
-      <div class="codigo-wrap">
-        <label>Código (está en el reverso de tu placa)</label>
-        <input type="text" id="fCodigo" placeholder="BT-001" maxlength="10">
-        <div class="codigo-hint">✦ Ejemplo: BT-001, BT-002… ✦</div>
-      </div>
-    </div>
-
-    <!-- FOTO -->
-    <div class="card">
-      <div class="card-title">
-        <div class="card-title-icon">📷</div>
-        <div class="card-title-text">Foto del bautizado/a</div>
-      </div>
-      <input type="file" id="fFoto" accept="image/jpeg,image/png" style="display:none;" onchange="previewFoto(this)">
-      <div class="foto-zona" id="fotoZona" onclick="document.getElementById('fFoto').click()">
-        <div id="fotoContenido">
-          <span class="foto-icon">📷</span>
-          <div class="foto-text">Toca aquí para subir una foto</div>
-          <div class="foto-sub">JPG o PNG · máx. 5 MB</div>
-        </div>
-        <div id="fotoPreview" style="display:none;">
-          <img id="fotoImg" src="" alt="Vista previa" style="max-width:100%;max-height:220px;border-radius:14px;border:2px solid rgba(21,101,192,0.3);">
-          <div style="font-size:12px;color:var(--blue2);font-weight:700;margin-top:10px;">✅ Foto seleccionada · Toca para cambiar</div>
-        </div>
-      </div>
-      <div id="fotoStatus" style="font-size:12px;color:var(--mid);font-weight:700;margin-top:8px;text-align:center;"></div>
-    </div>
-
-    <!-- DATOS BAUTIZADO -->
-    <div class="card">
-      <div class="card-title">
-        <div class="card-title-icon">🕊️</div>
-        <div class="card-title-text">Datos del bautizado/a</div>
-      </div>
-      <div class="field">
-        <label>Nombre completo</label>
-        <input type="text" id="fNombre" placeholder="Ej. Santiago Rodríguez">
-      </div>
-      <div class="two-col">
-        <div class="field">
-          <label>Fecha del bautizo</label>
-          <input type="date" id="fFecha">
-        </div>
-        <div class="field">
-          <label>Sexo</label>
-          <select id="fSexo">
-            <option value="Hombre">Hombre</option>
-            <option value="Mujer">Mujer</option>
-          </select>
-        </div>
-      </div>
-    </div>
-
-    <!-- PAPÁS -->
-    <div class="card">
-      <div class="card-title">
-        <div class="card-title-icon">👨‍👩‍👦</div>
-        <div class="card-title-text">Nombre de los papás</div>
-      </div>
-      <div class="field">
-        <label>Nombre del papá</label>
-        <input type="text" id="fPadre" placeholder="Ej. Roberto García">
-      </div>
-      <div class="field">
-        <label>Nombre de la mamá</label>
-        <input type="text" id="fMadre" placeholder="Ej. Laura Martínez">
-      </div>
+  <div class="s1-cross-wrap">
+    <div style="position:relative;">
+      <div class="s1-halo"></div>
+      <div class="s1-halo2"></div>
+      <svg class="s1-cross-svg" viewBox="0 0 180 220" xmlns="http://www.w3.org/2000/svg">
+        <!-- Cruz dorada -->
+        <defs>
+          <linearGradient id="crossGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#F0D080"/>
+            <stop offset="50%" style="stop-color:#C9A84C"/>
+            <stop offset="100%" style="stop-color:#A07830"/>
+          </linearGradient>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <!-- Sombra -->
+        <rect x="77" y="22" width="26" height="130" rx="5" fill="rgba(0,0,0,.08)" transform="translate(3,4)"/>
+        <rect x="28" y="56" width="124" height="26" rx="5" fill="rgba(0,0,0,.08)" transform="translate(3,4)"/>
+        <!-- Cruz principal -->
+        <rect x="77" y="22" width="26" height="130" rx="5" fill="url(#crossGrad)" filter="url(#glow)"/>
+        <rect x="28" y="56" width="124" height="26" rx="5" fill="url(#crossGrad)" filter="url(#glow)"/>
+        <!-- Detalles dorados -->
+        <rect x="81" y="26" width="6" height="122" rx="3" fill="rgba(255,255,255,.35)"/>
+        <rect x="32" y="60" width="116" height="6" rx="3" fill="rgba(255,255,255,.35)"/>
+        <!-- Ornamento centro -->
+        <circle cx="90" cy="69" r="10" fill="url(#crossGrad)"/>
+        <circle cx="90" cy="69" r="6" fill="rgba(255,255,255,.4)"/>
+        <!-- Ramitas SVG en la cruz -->
+        <!-- Arriba izquierda -->
+        <g transform="translate(28,18) rotate(-20)">
+          <path d="M0,0 Q-10,-20 -5,-35" stroke="#4A7C59" stroke-width="2" fill="none"/>
+          <ellipse cx="-5" cy="-35" rx="6" ry="4" fill="#6aab6a" transform="rotate(-30,-5,-35)"/>
+          <path d="M-3,-12 Q-18,-18 -22,-10" stroke="#4A7C59" stroke-width="1.5" fill="none"/>
+          <ellipse cx="-22" cy="-10" rx="5" ry="3" fill="#7BC47B" transform="rotate(-45,-22,-10)"/>
+          <path d="M-1,-22 Q10,-28 8,-38" stroke="#4A7C59" stroke-width="1.5" fill="none"/>
+          <ellipse cx="8" cy="-38" rx="5" ry="3" fill="#6aab6a" transform="rotate(20,8,-38)"/>
+          <!-- Florecita -->
+          <circle cx="-5" cy="-40" r="4" fill="#FFB347" opacity=".8"/>
+          <circle cx="-5" cy="-40" r="2" fill="#FFD700"/>
+        </g>
+        <!-- Arriba derecha -->
+        <g transform="translate(152,18) rotate(20)">
+          <path d="M0,0 Q10,-20 5,-35" stroke="#4A7C59" stroke-width="2" fill="none"/>
+          <ellipse cx="5" cy="-35" rx="6" ry="4" fill="#6aab6a" transform="rotate(30,5,-35)"/>
+          <path d="M3,-12 Q18,-18 22,-10" stroke="#4A7C59" stroke-width="1.5" fill="none"/>
+          <ellipse cx="22" cy="-10" rx="5" ry="3" fill="#7BC47B" transform="rotate(45,22,-10)"/>
+          <circle cx="5" cy="-40" r="4" fill="#FF9EC4" opacity=".8"/>
+          <circle cx="5" cy="-40" r="2" fill="#FFD700"/>
+        </g>
+        <!-- Abajo izquierda -->
+        <g transform="translate(25,165) rotate(15)">
+          <path d="M0,0 Q-15,15 -10,32" stroke="#4A7C59" stroke-width="2" fill="none"/>
+          <ellipse cx="-10" cy="32" rx="6" ry="4" fill="#6aab6a" transform="rotate(20,-10,32)"/>
+          <path d="M-5,14 Q-22,16 -24,28" stroke="#4A7C59" stroke-width="1.5" fill="none"/>
+          <ellipse cx="-24" cy="28" rx="5" ry="3" fill="#7BC47B" transform="rotate(60,-24,28)"/>
+          <circle cx="-12" cy="36" r="4" fill="#FFB347" opacity=".8"/>
+          <circle cx="-12" cy="36" r="2" fill="#FFD700"/>
+        </g>
+        <!-- Abajo derecha -->
+        <g transform="translate(155,165) rotate(-15)">
+          <path d="M0,0 Q15,15 10,32" stroke="#4A7C59" stroke-width="2" fill="none"/>
+          <ellipse cx="10" cy="32" rx="6" ry="4" fill="#6aab6a" transform="rotate(-20,10,32)"/>
+          <path d="M5,14 Q22,16 24,28" stroke="#4A7C59" stroke-width="1.5" fill="none"/>
+          <ellipse cx="24" cy="28" rx="5" ry="3" fill="#7BC47B" transform="rotate(-60,24,28)"/>
+          <circle cx="12" cy="36" r="4" fill="#FF9EC4" opacity=".8"/>
+          <circle cx="12" cy="36" r="2" fill="#FFD700"/>
+        </g>
+      </svg>
     </div>
 
-    <!-- MENSAJE -->
-    <div class="card">
-      <div class="card-title">
-        <div class="card-title-icon">💛</div>
-        <div class="card-title-text">Mensaje de los papás</div>
-      </div>
-      <div class="field">
-        <label>Un mensaje especial para tu hijo/a</label>
-        <textarea id="fMensaje" placeholder="Ej. Eres el regalo más hermoso que Dios nos dio. Te amamos con todo el corazón..." oninput="previewMensaje(this)"></textarea>
-      </div>
-      <div class="mensaje-preview" id="mensajePreview">
-        <p id="mensajeTexto"></p>
-      </div>
-    </div>
-
-    <!-- MÚSICA -->
-    <div class="card">
-      <div class="card-title">
-        <div class="card-title-icon">🎵</div>
-        <div class="card-title-text">Música de fondo</div>
-      </div>
-      <div class="music-opts">
-        <label class="music-opt">
-          <input type="radio" name="musica" value="instrumental" checked onchange="toggleMusica(this)">
-          <div>
-            <div class="music-opt-label">🎼 Música cristiana instrumental</div>
-            <div class="music-opt-sub">Himno instrumental por defecto</div>
-          </div>
-        </label>
-        <label class="music-opt">
-          <input type="radio" name="musica" value="personalizada" onchange="toggleMusica(this)">
-          <div>
-            <div class="music-opt-label">🔗 Mi propia canción</div>
-            <div class="music-opt-sub">Pega el link de tu canción (Google Drive, etc.)</div>
-          </div>
-        </label>
-        <label class="music-opt">
-          <input type="radio" name="musica" value="ninguna" onchange="toggleMusica(this)">
-          <div>
-            <div class="music-opt-label">🔇 Sin música</div>
-            <div class="music-opt-sub">Solo el contenido visual</div>
-          </div>
-        </label>
-      </div>
-      <div class="url-campo" id="urlCampo">
-        <div class="field" style="margin-top:8px;">
-          <label>Link de tu canción</label>
-          <input type="url" id="fMusicaUrl" placeholder="https://drive.google.com/...">
-        </div>
-        <div style="font-size:11px;color:var(--mid);font-weight:700;margin-top:6px;">
-          💡 Google Drive → "Compartir" → "Cualquiera con el enlace" → pega aquí
-        </div>
-      </div>
-    </div>
-
-    <button class="btn-enviar" id="btnEnviar" onclick="enviar()">
-      ✝️ &nbsp; Activar mi Recuerdo de Bautizo
-    </button>
-
+    <div class="s1-title">✦ Recuerdo Sagrado ✦</div>
+    <div class="s1-name">D</div>
+    <div class="s1-verse">"El que crea y sea bautizado<br>será salvo" — Marcos 16:16</div>
   </div>
 </div>
 
-<!-- ===== PANTALLA ÉXITO ===== -->
-<div class="success-screen" id="successScreen">
-
-  <div class="success-hero">
-    <div class="success-hero-rays"></div>
-    <div class="success-angel-wrap">
-      <div class="success-halo"></div>
-      <span class="success-cross">✝️</span>
-    </div>
-    <span class="success-dove">🕊️</span>
-    <h2 class="success-title">¡Datos<br><em>Recibidos!</em></h2>
-    <p class="success-verse">
-      "Que el Señor te bendiga y te guarde;<br>
-      que el Señor haga resplandecer su rostro sobre ti"<br>
-      — Números 6:24–25
-    </p>
-    <div class="gold-divider" style="margin: 20px auto 0;">
-      <div class="gold-line"></div>
-      <span class="gold-star">✦</span>
-      <div class="gold-line r"></div>
-    </div>
-    <div class="success-hero-curve"></div>
+<!-- ===== ESCENA 2: FOTO ===== -->
+<div class="scene" id="scene2">
+  <div class="s2-frame">
+    <img class="s2-foto" src="https://i.ibb.co/q2s8Vdn/Screenshot-20260528-142207-Samsung-Browser.jpg" alt="D">
   </div>
+  <div class="s2-label">D</div>
+  <div class="s2-fecha">🕊️ 28 de mayo de 2026</div>
+</div>
 
-  <div class="success-body">
-
-    <!-- CÓDIGO BADGE -->
-    <div class="confirm-card">
-      <div class="card-title">
-        <div class="card-title-icon">🏷️</div>
-        <div class="card-title-text">Tu código de placa</div>
+<!-- ===== ESCENA 3: DATOS ===== -->
+<div class="scene" id="scene3">
+  <div class="s3-content">
+    <div class="s3-nombre">D</div>
+    <div class="s3-divider">
+      <div class="s3-line"></div>
+      <div class="s3-star">✦</div>
+      <div class="s3-line r"></div>
+    </div>
+    <div class="s3-fecha">🕊️ 28 de mayo de 2026</div>
+    <div class="s3-papas">
+      <div class="s3-papa">
+        <div class="s3-papa-icon">👨</div>
+        <div class="s3-papa-label">Papá</div>
+        <div class="s3-papa-name">D</div>
       </div>
-      <div class="codigo-badge-wrap">
-        <div class="codigo-badge-label">Código registrado</div>
-        <div class="codigo-badge-value" id="successCodigo">BT-001</div>
+      <div class="s3-papa">
+        <div class="s3-papa-icon">👩</div>
+        <div class="s3-papa-label">Mamá</div>
+        <div class="s3-papa-name">S</div>
       </div>
     </div>
+    <div style="background:white;border:1px solid rgba(201,168,76,.2);border-radius:18px;padding:20px;text-align:center;box-shadow:0 3px 14px rgba(0,0,0,.06);width:100%;"><div style="font-family:'Cormorant Garamond',serif;font-size:15px;color:#1A1205;font-style:italic;line-height:1.75;">"Ðdddd"</div><div style="font-size:12px;color:#C9A84C;font-weight:700;letter-spacing:1px;margin-top:10px;">— D & S</div></div>
+  </div>
+</div>
 
-    <!-- DATOS CONFIRMADOS -->
-    <div class="confirm-card">
-      <div class="card-title">
-        <div class="card-title-icon">✅</div>
-        <div class="card-title-text">Información enviada</div>
-      </div>
-      <div class="data-list">
-        <div class="data-row">
-          <div class="data-icon">🕊️</div>
-          <div class="data-content">
-            <div class="data-label">Bautizado/a</div>
-            <div class="data-value" id="sNombre">—</div>
-          </div>
-        </div>
-        <div class="data-row">
-          <div class="data-icon">📅</div>
-          <div class="data-content">
-            <div class="data-label">Fecha del bautizo</div>
-            <div class="data-value" id="sFecha">—</div>
-          </div>
-        </div>
-        <div class="data-row">
-          <div class="data-icon">👨‍👩‍👦</div>
-          <div class="data-content">
-            <div class="data-label">Papás</div>
-            <div class="data-value" id="sPadres">—</div>
-          </div>
-        </div>
-        <div class="data-row">
-          <div class="data-icon">🎵</div>
-          <div class="data-content">
-            <div class="data-label">Música</div>
-            <div class="data-value" id="sMusica">—</div>
-          </div>
-        </div>
-      </div>
-      <div class="sent-badge" style="margin-top:18px;">
-        <span class="sent-badge-icon">✅</span>
-        Solicitud enviada correctamente
-      </div>
+<!-- ===== ESCENA 4: VERSÍCULOS ===== -->
+<div class="scene" id="scene4">
+  <div class="s4-content">
+    <div class="s4-title">✦ Palabra de Dios ✦</div>
+
+    <div class="s4-verse">
+      <div class="s4-verse-text">El que crea y sea bautizado será salvo; pero el que no crea será condenado.</div>
+      <div class="s4-verse-ref">Marcos 16:16</div>
+    </div>
+    <div class="s4-verse">
+      <div class="s4-verse-text">Arrepentíos, y bautícese cada uno de vosotros en el nombre de Jesucristo para perdón de los pecados; y recibiréis el don del Espíritu Santo.</div>
+      <div class="s4-verse-ref">Hechos 2:38</div>
+    </div>
+    <div class="s4-verse">
+      <div class="s4-verse-text">Fuimos sepultados juntamente con él para muerte por el bautismo, a fin de que como Cristo resucitó de los muertos por la gloria del Padre, así también nosotros andemos en vida nueva.</div>
+      <div class="s4-verse-ref">Romanos 6:4</div>
     </div>
 
-    <!-- VERSÍCULO -->
-    <div class="bible-card">
-      <div class="bible-card-verse">
-        "Dejen que los niños vengan a mí, y no se lo impidan,<br>
-        porque el reino de los cielos es de quienes son<br>
-        como ellos."
+    <div class="s4-prayer">
+      <div class="s4-prayer-text">
+        Señor, en este día tan especial, <strong style="color:#F0D080;">D</strong> ha tomado la decisión más importante de su vida: seguirte a Ti.<br><br>
+        Que tu Espíritu Santo sea su guía en cada paso, que tu amor sea su fortaleza en los momentos difíciles, y que tu Palabra ilumine siempre su camino.<br><br>
+        Bendice a sus padres, D y S, por haberlo/la criado en tu amor.
       </div>
-      <div class="bible-divider"></div>
-      <div class="bible-card-ref">✦ &nbsp; Mateo 19:14 &nbsp; ✦</div>
+      <div class="s4-prayer-amen">— Amén 🙏 —</div>
     </div>
 
-    <!-- TIEMPO ESPERA -->
-    <div class="wait-card">
-      <div class="wait-hours">24</div>
-      <div class="wait-text">
-        En menos de <strong>24 horas</strong> tu Recuerdo de Bautizo<br>
-        estará listo. 🙏<br>
-        <span style="font-size:13px;color:var(--mid);">Que Dios los bendiga enormemente.</span>
-      </div>
-    </div>
+    <div class="s4-audio"><div class="s4-audio-label">🎵 Música</div><audio controls autoplay loop style="width:100%;border-radius:10px;"><source src="https://archive.org/download/AmazingGraceInstrumental/amazing_grace_instrumental.mp3" type="audio/mpeg"></audio></div>
 
-    <div class="footer">Hecho con ❤️ por <span>NFC Connect MX</span></div>
-
+    <div class="s4-footer">Hecho con ❤️ por <span>NFC Connect MX</span></div>
   </div>
 </div>
 
 <script>
 // ============================================================
-//  CONFIGURACIÓN (igual que el original)
+//  CONFIGURACIÓN
 // ============================================================
-const IMGBB_KEY = "f1db41c660962a03ee1d6d2ad11c9a86";
-const GOOGLE_FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLSdTG_IvHMJ99CBpO4sY0ngTs186zwG3-0EYADC_wRHN0lOkTg/formResponse";
-const ENTRY = {
-  codigo:    "entry.370087155",
-  foto:      "entry.553892289",
-  nombre:    "entry.301461393",
-  fecha:     "entry.1985699989",
-  sexo:      "entry.1758860863",
-  padre:     "entry.1306373806",
-  madre:     "entry.1116848490",
-  mensaje:   "entry.1514147354",
-  musica:    "entry.1723085436",
-  musicaUrl: "entry.2008352203",
-};
+const TOTAL_SCENES = 4;
+let currentScene = 0;
+let curtainOpen = false;
+const W = window.innerWidth;
 
 // ============================================================
-//  ESTRELLAS EN CANVAS
+//  PALOMAS Y HOJITAS
 // ============================================================
-const starsCanvas = document.getElementById('stars-canvas');
-const sCtx = starsCanvas.getContext('2d');
-function resizeStars() {
-  starsCanvas.width  = Math.min(window.innerWidth, 440);
-  starsCanvas.height = window.innerHeight;
+const DOVES = ['🕊️'];
+const LEAVES = ['🍃','🌿','🍀','🌱'];
+
+function spawnDove(container) {
+  const d = document.createElement('div');
+  d.className = 'dove';
+  const size = 18 + Math.random() * 16;
+  const top  = 10 + Math.random() * 70;
+  const dur  = 8 + Math.random() * 10;
+  const delay = -Math.random() * dur;
+  d.style.cssText = `
+    top:${top}%;
+    font-size:${size}px;
+    animation-duration:${dur}s;
+    animation-delay:${delay}s;
+    --w:${W}px;
+    ${Math.random() > 0.5 ? 'transform:scaleX(-1);' : ''}
+  `;
+  d.textContent = '🕊️';
+  container.appendChild(d);
 }
-resizeStars();
-window.addEventListener('resize', resizeStars);
 
-const stars = Array.from({length:60}, () => ({
-  x: Math.random() * 440,
-  y: Math.random() * window.innerHeight,
-  r: Math.random() * 1.8 + 0.4,
-  alpha: Math.random(),
-  da: (Math.random() * 0.015 + 0.005) * (Math.random() > 0.5 ? 1 : -1),
-  gold: Math.random() > 0.6,
-}));
+function spawnLeaf(container) {
+  const l = document.createElement('div');
+  l.className = 'leaf';
+  const left = Math.random() * 100;
+  const dur  = 6 + Math.random() * 8;
+  const delay = -Math.random() * dur;
+  const size = 10 + Math.random() * 10;
+  l.style.cssText = `
+    left:${left}%;
+    font-size:${size}px;
+    animation-duration:${dur}s;
+    animation-delay:${delay}s;
+  `;
+  l.textContent = LEAVES[Math.floor(Math.random() * LEAVES.length)];
+  container.appendChild(l);
+}
 
-function animateStars() {
-  sCtx.clearRect(0, 0, starsCanvas.width, starsCanvas.height);
-  stars.forEach(s => {
-    s.alpha += s.da;
-    if (s.alpha >= 1) { s.alpha = 1; s.da = -Math.abs(s.da); }
-    if (s.alpha <= 0) { s.alpha = 0; s.da =  Math.abs(s.da); }
-    sCtx.save();
-    sCtx.globalAlpha = s.alpha * 0.7;
-    sCtx.fillStyle = s.gold ? '#C9A84C' : '#ffffff';
-    sCtx.shadowColor = s.gold ? '#FFD700' : '#ffffff';
-    sCtx.shadowBlur = 6;
-    sCtx.beginPath();
-    sCtx.arc(s.x, s.y, s.r, 0, Math.PI*2);
-    sCtx.fill();
-    sCtx.restore();
+function populateScene(sceneEl, doves = 3, leaves = 6) {
+  for (let i = 0; i < doves; i++) spawnDove(sceneEl);
+  for (let i = 0; i < leaves; i++) spawnLeaf(sceneEl);
+}
+
+// Poblar escenas
+['scene1','scene2','scene3'].forEach(id => {
+  populateScene(document.getElementById(id), 3, 5);
+});
+
+// Escena 4 con muchas palomas al final
+populateScene(document.getElementById('scene4'), 8, 4);
+
+// ============================================================
+//  CORTINA
+// ============================================================
+function openCurtain(cb) {
+  const c = document.getElementById('curtain');
+  c.classList.add('curtain-open');
+  setTimeout(() => {
+    c.style.display = 'none';
+    curtainOpen = true;
+    if (cb) cb();
+  }, 1300);
+}
+
+function closeCurtain(cb) {
+  const c = document.getElementById('curtain');
+  c.style.display = 'flex';
+  c.classList.remove('curtain-open');
+  setTimeout(() => {
+    if (cb) cb();
+  }, 1300);
+}
+
+// ============================================================
+//  NAVEGACIÓN
+// ============================================================
+function showScene(index) {
+  document.querySelectorAll('.scene').forEach((s, i) => {
+    s.classList.toggle('active', i === index);
   });
-  requestAnimationFrame(animateStars);
-}
-animateStars();
-
-// ============================================================
-//  CONFETTI AL ÉXITO
-// ============================================================
-const cCanvas = document.getElementById('confetti-canvas');
-const cCtx = cCanvas.getContext('2d');
-cCanvas.width  = Math.min(window.innerWidth, 440);
-cCanvas.height = window.innerHeight;
-
-let confettiPieces = [];
-let confettiRunning = false;
-
-function launchConfetti() {
-  const symbols = ['✦','🕊️','✝','⭐','💫','🌟','✨'];
-  confettiPieces = Array.from({length:50}, () => ({
-    x: Math.random() * cCanvas.width,
-    y: -30,
-    vy: Math.random() * 3 + 2,
-    vx: (Math.random() - 0.5) * 2,
-    rot: Math.random() * 360,
-    rotSpeed: (Math.random() - 0.5) * 8,
-    symbol: symbols[Math.floor(Math.random() * symbols.length)],
-    size: Math.random() * 18 + 10,
-    alpha: 1,
-    life: Math.random() * 0.5 + 0.8,
-  }));
-  confettiRunning = true;
-  animateConfetti();
-}
-
-function animateConfetti() {
-  if (!confettiRunning) return;
-  cCtx.clearRect(0, 0, cCanvas.width, cCanvas.height);
-  confettiPieces.forEach(p => {
-    p.y    += p.vy;
-    p.x    += p.vx;
-    p.rot  += p.rotSpeed;
-    p.alpha = Math.max(0, p.alpha - 0.008 / p.life);
-    if (p.alpha <= 0) return;
-    cCtx.save();
-    cCtx.globalAlpha = p.alpha;
-    cCtx.font = `${p.size}px serif`;
-    cCtx.translate(p.x, p.y);
-    cCtx.rotate(p.rot * Math.PI / 180);
-    cCtx.fillText(p.symbol, 0, 0);
-    cCtx.restore();
+  document.querySelectorAll('.dot').forEach((d, i) => {
+    d.classList.toggle('active', i === index);
   });
-  confettiPieces = confettiPieces.filter(p => p.alpha > 0 && p.y < cCanvas.height + 40);
-  if (confettiPieces.length > 0) {
-    requestAnimationFrame(animateConfetti);
-  } else {
-    confettiRunning = false;
-    cCtx.clearRect(0, 0, cCanvas.width, cCanvas.height);
-  }
+  const btn = document.getElementById('btnNext');
+  btn.classList.toggle('hidden', index === TOTAL_SCENES - 1);
+  currentScene = index;
 }
 
-// ============================================================
-//  FUNCIONES ORIGINALES (sin cambios en lógica)
-// ============================================================
-function previewFoto(input) {
-  if (input.files && input.files[0]) {
-    const reader = new FileReader();
-    reader.onload = e => {
-      document.getElementById('fotoImg').src = e.target.result;
-      document.getElementById('fotoContenido').style.display = 'none';
-      document.getElementById('fotoPreview').style.display = 'block';
-      document.getElementById('fotoZona').style.borderColor = '#1565C0';
-    };
-    reader.readAsDataURL(input.files[0]);
-  }
-}
-
-function previewMensaje(el) {
-  const texto = el.value.trim();
-  const preview = document.getElementById('mensajePreview');
-  const textoEl = document.getElementById('mensajeTexto');
-  if (texto.length > 10) {
-    textoEl.textContent = '"' + texto + '"';
-    preview.classList.add('visible');
-  } else {
-    preview.classList.remove('visible');
-  }
-}
-
-function toggleMusica(radio) {
-  document.getElementById('urlCampo').classList.toggle('visible', radio.value === 'personalizada');
-}
-
-async function subirFotoImgBB() {
-  const fileInput = document.getElementById('fFoto');
-  if (!fileInput.files || !fileInput.files[0]) return '';
-  const status = document.getElementById('fotoStatus');
-  status.textContent = '📤 Subiendo foto…';
-  const formData = new FormData();
-  formData.append('image', fileInput.files[0]);
-  try {
-    const res  = await fetch('https://api.imgbb.com/1/upload?key=' + IMGBB_KEY, { method:'POST', body:formData });
-    const data = await res.json();
-    if (data.success) {
-      status.textContent = '✅ Foto subida';
-      status.style.color = '#2E7D32';
-      return data.data.url;
-    } else {
-      status.textContent = '⚠️ Error al subir la foto';
-      return '';
-    }
-  } catch {
-    status.textContent = '⚠️ Error al subir la foto';
-    return '';
-  }
-}
-
-function validar() {
-  const reqs = [
-    { id:'fCodigo',  msg:'Escribe el código de tu placa (ej. BT-001)' },
-    { id:'fNombre',  msg:'Escribe el nombre del bautizado/a' },
-    { id:'fFecha',   msg:'Selecciona la fecha del bautizo' },
-    { id:'fPadre',   msg:'Escribe el nombre del papá' },
-    { id:'fMadre',   msg:'Escribe el nombre de la mamá' },
-    { id:'fMensaje', msg:'Escribe un mensaje de los papás' },
-  ];
-  for (const r of reqs) {
-    const el = document.getElementById(r.id);
-    if (!el.value.trim()) {
-      el.style.borderColor = '#FF5252';
-      el.focus();
-      alert('⚠️ ' + r.msg);
-      return false;
-    }
-    el.style.borderColor = '';
-  }
-  const musicaOpt = document.querySelector('input[name="musica"]:checked').value;
-  if (musicaOpt === 'personalizada' && !document.getElementById('fMusicaUrl').value.trim()) {
-    alert('⚠️ Pega el link de tu canción o elige otra opción de música');
-    return false;
-  }
-  return true;
-}
-
-async function enviar() {
-  if (!validar()) return;
-
-  const btn = document.getElementById('btnEnviar');
-  btn.disabled = true;
-  btn.innerHTML = '⏳ &nbsp; Enviando tu Recuerdo…';
-
-  const fotoUrl = await subirFotoImgBB();
-
-  const codigo    = document.getElementById('fCodigo').value.trim().toUpperCase();
-  const musicaOpt = document.querySelector('input[name="musica"]:checked').value;
-  const musicaUrl = document.getElementById('fMusicaUrl').value.trim();
-
-  const fechaRaw = document.getElementById('fFecha').value;
-  const fechaBonita = fechaRaw
-    ? new Date(fechaRaw + 'T12:00:00').toLocaleDateString('es-MX', { day:'numeric', month:'long', year:'numeric' })
-    : '';
-
-  const params = new URLSearchParams();
-  params.append(ENTRY.codigo,    codigo);
-  params.append(ENTRY.foto,      fotoUrl);
-  params.append(ENTRY.nombre,    document.getElementById('fNombre').value.trim());
-  params.append(ENTRY.fecha,     fechaBonita);
-  params.append(ENTRY.sexo,      document.getElementById('fSexo').value);
-  params.append(ENTRY.padre,     document.getElementById('fPadre').value.trim());
-  params.append(ENTRY.madre,     document.getElementById('fMadre').value.trim());
-  params.append(ENTRY.mensaje,   document.getElementById('fMensaje').value.trim());
-  params.append(ENTRY.musica,    musicaOpt);
-  params.append(ENTRY.musicaUrl, musicaUrl);
-
-  fetch(GOOGLE_FORM_ACTION, {
-    method:'POST', mode:'no-cors',
-    headers:{'Content-Type':'application/x-www-form-urlencoded'},
-    body:params.toString()
+function nextScene() {
+  if (currentScene >= TOTAL_SCENES - 1) return;
+  closeCurtain(() => {
+    showScene(currentScene + 1);
+    setTimeout(() => openCurtain(), 100);
   });
-
-  // Poblar pantalla de éxito
-  document.getElementById('successCodigo').textContent = codigo;
-  document.getElementById('sNombre').textContent  = document.getElementById('fNombre').value.trim();
-  document.getElementById('sFecha').textContent   = fechaBonita || '—';
-  document.getElementById('sPadres').textContent  =
-    document.getElementById('fPadre').value.trim() + ' & ' + document.getElementById('fMadre').value.trim();
-  const musicaLabels = { instrumental:'🎼 Música cristiana instrumental', personalizada:'🔗 Canción personalizada', ninguna:'🔇 Sin música' };
-  document.getElementById('sMusica').textContent  = musicaLabels[musicaOpt] || musicaOpt;
-
-  document.getElementById('formArea').style.display = 'none';
-  document.getElementById('successScreen').classList.add('show');
-  window.scrollTo({ top:0, behavior:'smooth' });
-  setTimeout(launchConfetti, 400);
 }
+
+function goScene(index) {
+  if (index === currentScene) return;
+  closeCurtain(() => {
+    showScene(index);
+    setTimeout(() => openCurtain(), 100);
+  });
+}
+
+// ============================================================
+//  MÚSICA
+// ============================================================
+function tryPlayAudio() {
+  const audio = document.getElementById('bgAudio');
+  if (audio && audio.src && audio.src !== window.location.href) {
+    audio.volume = 0.5;
+    audio.play().catch(() => {});
+  }
+}
+
+// ============================================================
+//  INICIO
+// ============================================================
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    openCurtain(() => {
+      tryPlayAudio();
+    });
+  }, 800);
+});
+
+// Intento de play al primer toque (mobile)
+document.addEventListener('touchstart', tryPlayAudio, { once: true });
+document.addEventListener('click', tryPlayAudio, { once: true });
 </script>
 </body>
 </html>
